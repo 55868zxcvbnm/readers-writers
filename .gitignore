@@ -28,3 +28,18 @@
 # Build results
 bin/
 obj/
+# Ignorar archivos de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignorar carpetas de compilación
+bin/
+obj/
+
+# Ignorar archivos de configuración de paquetes NuGet
+project.lock.json
+project.fragment.lock.json
+
