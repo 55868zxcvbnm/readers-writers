@@ -1,39 +1,42 @@
 # Visual Studio
 .vs/
-*.suo
-*.user
-*.userosscache
-*.suo
-*.cache
-*.pidb
-*.log
-*.ncb
-*.aps
-*.ncb
-*.suo
-*.dmp
-*.dbmdl
-*.pdb
-*.opendb
-*.vcxproj*
-*.vcproj*
-*.csproj.user
-*.csproj.nuget.g.props
-*.csproj.nuget.g.targets
-*.dbmdl
-*.bak
-*.backup
-*.swp
+bin/
+obj/
+.vs/
+.suo
+.user
+.userosscache
+.suo
+.cache
+.pidb
+.log
+.ncb
+.aps
+.ncb
+.suo
+.dmp
+.dbmdl
+.pdb
+.opendb
+.vcxproj*
+.vcproj*
+.csproj.user
+.csproj.nuget.g.props
+.csproj.nuget.g.targets
+.dbmdl
+.bak
+.backup
+.swp
 
 # Build results
 bin/
 obj/
 # Ignorar archivos de Visual Studio
 .vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
+.suo
+.user
+.userosscache
+.sln.docstates
 
 # Ignorar carpetas de compilación
 bin/
