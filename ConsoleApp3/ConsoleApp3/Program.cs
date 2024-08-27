@@ -1,106 +1,107 @@
 ﻿using System;
 using System.Threading;
 
-class ReaderWriterProblem
+class ProblemaLectoresEscritores
 {
     // Contador de lectores activos
-    private static int readCount = 0;
+    private static int contadorLectores = 0;
 
     // Lock para controlar el acceso al contador de lectores
-    private static object readCountLock = new object();
+    private static object lockContadorLectores = new object();
 
     // Lock para controlar el acceso al recurso compartido
-    private static object resourceLock = new object();
+    private static object lockRecurso = new object();
 
     static void Main(string[] args)
     {
-        Random random = new Random();
+        Random aleatorio = new Random();
         // Creación de un array de hilos (threads)
-        Thread[] threads = new Thread[10];
+        Thread[] hilos = new Thread[10];
 
         // Inicialización y arranque de los hilos
-        for (int i = 0; i < threads.Length; i++)
+        for (int i = 0; i < hilos.Length; i++)
         {
             // Alterna entre crear un lector y un escritor
             if (i % 2 == 0)
             {
                 // Crea un hilo lector
-                threads[i] = new Thread(() => Reader(random.Next(1000, 5000)));
+                hilos[i] = new Thread(() => Lector(aleatorio.Next(1000, 5000)));
             }
             else
             {
                 // Crea un hilo escritor
-                threads[i] = new Thread(() => Writer(random.Next(1000, 5000)));
+                hilos[i] = new Thread(() => Escritor(aleatorio.Next(1000, 5000)));
             }
             // Inicia el hilo
-            threads[i].Start();
+            hilos[i].Start();
         }
 
         // Espera a que todos los hilos terminen su ejecución
-        foreach (Thread thread in threads)
+        foreach (Thread hilo in hilos)
         {
-            thread.Join();
+            hilo.Join();
         }
 
         Console.WriteLine("Todos los hilos han terminado.");
     }
 
     // Método que representa la operación de lectura
-    static void Reader(int delay)
+    static void Lector(int demora)
     {
         while (true)
         {
             // Bloquea el acceso al contador de lectores
-            Monitor.Enter(readCountLock);
-            readCount++;
+            Monitor.Enter(lockContadorLectores);
+            contadorLectores++;
             // Si este es el primer lector, bloquea el acceso al recurso
-            if (readCount == 1)
+            if (contadorLectores == 1)
             {
-                Monitor.Enter(resourceLock);
+                Monitor.Enter(lockRecurso);
             }
             // Libera el lock del contador de lectores
-            Monitor.Exit(readCountLock);
+            Monitor.Exit(lockContadorLectores);
 
             // Simula la lectura
             Console.WriteLine($"Lector {Thread.CurrentThread.ManagedThreadId} está leyendo.");
-            Thread.Sleep(delay); // Simula el tiempo de lectura
+            Thread.Sleep(demora); // Simula el tiempo de lectura
 
             // Bloquea nuevamente el acceso al contador de lectores
-            Monitor.Enter(readCountLock);
-            readCount--;
+            Monitor.Enter(lockContadorLectores);
+            contadorLectores--;
             // Si este es el último lector, libera el lock del recurso
-            if (readCount == 0)
+            if (contadorLectores == 0)
             {
-                Monitor.Exit(resourceLock);
+                Monitor.Exit(lockRecurso);
             }
             // Libera el lock del contador de lectores
-            Monitor.Exit(readCountLock);
+            Monitor.Exit(lockContadorLectores);
 
             // Simula el final de la lectura
             Console.WriteLine($"Lector {Thread.CurrentThread.ManagedThreadId} ha terminado de leer.");
-            Thread.Sleep(delay); // Espera antes de intentar leer de nuevo
+            Thread.Sleep(demora); // Espera antes de intentar leer de nuevo
         }
     }
 
     // Método que representa la operación de escritura
-    static void Writer(int delay)
+    static void Escritor(int demora)
     {
         while (true)
         {
             // Bloquea el acceso al recurso para escribir
-            Monitor.Enter(resourceLock);
+            Monitor.Enter(lockRecurso);
             // Simula la escritura
             Console.WriteLine($"Escritor {Thread.CurrentThread.ManagedThreadId} está escribiendo.");
-            Thread.Sleep(delay); // Simula el tiempo de escritura
+            Thread.Sleep(demora); // Simula el tiempo de escritura
             Console.WriteLine($"Escritor {Thread.CurrentThread.ManagedThreadId} ha terminado de escribir.");
             // Libera el lock del recurso
-            Monitor.Exit(resourceLock);
+            Monitor.Exit(lockRecurso);
 
             // Espera antes de intentar escribir de nuevo
-            Thread.Sleep(delay);
+            Thread.Sleep(demora);
         }
     }
 }
+
 
 
 /*
